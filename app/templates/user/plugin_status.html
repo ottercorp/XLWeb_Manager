@@ -1,0 +1,99 @@
+{% extends "user/base.html" %}
+{% block head_add %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tabs.css') }}">
+    <script>
+        function Tab_onClick(id) {
+            if (id === "main") {
+                document.getElementById("main").className = "tab-pane fade px-4 py-5 show active";
+                document.getElementById("test").className = "tab-pane fade px-4 py-5";
+                document.getElementById("all").className = "tab-pane fade px-4 py-5 show";
+                document.getElementById("main-tab").className = "nav-link border-0 text-uppercase font-weight-bold active";
+                document.getElementById("test-tab").className = "nav-link border-0 text-uppercase font-weight-bold";
+                document.getElementById("all-tab").className = "nav-link border-0 text-uppercase font-weight-bold";
+            } else if (id === "test") {
+                document.getElementById("main").className = "tab-pane fade px-4 py-5";
+                document.getElementById("test").className = "tab-pane fade px-4 py-5 show active";
+                document.getElementById("all").className = "tab-pane fade px-4 py-5 show";
+                document.getElementById("main-tab").className = "nav-link border-0 text-uppercase font-weight-bold";
+                document.getElementById("test-tab").className = "nav-link border-0 text-uppercase font-weight-bold active";
+                document.getElementById("all-tab").className = "nav-link border-0 text-uppercase font-weight-bold";
+            } else if (id === "all") {
+                document.getElementById("main").className = "tab-pane fade px-4 py-5";
+                document.getElementById("test").className = "tab-pane fade px-4 py-5";
+                document.getElementById("all").className = "tab-pane fade px-4 py-5 show active";
+                document.getElementById("main-tab").className = "nav-link border-0 text-uppercase font-weight-bold";
+                document.getElementById("test-tab").className = "nav-link border-0 text-uppercase font-weight-bold";
+                document.getElementById("all-tab").className = "nav-link border-0 text-uppercase font-weight-bold active";
+            }
+        }
+    </script>
+{% endblock %}
+{% block page_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="p-5 bg-white rounded shadow mb-5">
+                    <ul id="myTab" role="tablist" class="nav nav-tabs nav-pills flex-column flex-sm-row text-center bg-light border-0 rounded-nav">
+                        <li class="nav-item flex-sm-fill">
+                            <a id="main-tab" data-toggle="tab" style="cursor:pointer;" onClick="Tab_onClick('main')" role="tab" aria-controls="main" aria-selected="true"
+                               class="nav-link border-0 text-uppercase font-weight-bold active">主库插件</a>
+                        </li>
+                        <li class="nav-item flex-sm-fill">
+                            <a id="test-tab" data-toggle="tab" style="cursor:pointer;" onClick="Tab_onClick('test')" role="tab" aria-controls="test" aria-selected="false"
+                               class="nav-link border-0 text-uppercase font-weight-bold">测试插件</a>
+                        </li>
+                        <li class="nav-item flex-sm-fill">
+                            <a id="all-tab" data-toggle="tab" style="cursor:pointer;" onClick="Tab_onClick('all')" role="tab" aria-controls="all" aria-selected="false"
+                               class="nav-link border-0 text-uppercase font-weight-bold">所有插件</a>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div id="main" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade px-4 py-5 show active">
+                            <h5>主库插件均经过测试无误<br/>部分原先在主库但是现在看不见的插件，大概率是因为新版本未完成兼容性认证被移入测试库</h5>
+                            <table class="table table-bordered table-striped">
+                                <tr>
+                                    <td>
+                                        <b>插件名</b>
+                                    </td>
+                                    <td>
+                                        <b>版本</b>
+                                    </td>
+                                    <td>
+                                        <b>描述</b>
+                                    </td>
+                                </tr>
+                                {% for k,v in plugin_master_main.items() %}
+                                    <tr>
+                                        <td>{{ k }}</td>
+                                        <td>{{ v.version }}</td>
+                                        <td>{{ v.description }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div id="test" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade px-4 py-5 show">
+                            <h5>并非所有的测试版插件都能正常安装、使用。<br/>建议动手能力较弱的玩家不要开启测试版插件功能</h5>
+                            {% for k,v in plugin_master_test.items() %}
+                                {{ k }} 【测试】: {{ v.version }} <br/>
+                            {% endfor %}
+                        </div>
+                        <div id="all" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade px-4 py-5 show">
+                            <div>
+                                <h5>请善用Ctrl+F功能查找插件。<br/>本表中没有写入的第三方插件，可能会导致游戏崩溃或者无法启动，推荐立即停止使用。</h5>
+                                <ul style="clear:both;padding:0;margin:0;list-style:none;">
+                                    {% for k,v in plugin_master_main.items() %}
+                                        <li class="all_plgins_li">{{ k }}</li>
+                                    {% endfor %}
+                                    {% for k,v in plugin_master_test.items() %}
+                                        <li class="all_plgins_li">{{ k }} 【测试】</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

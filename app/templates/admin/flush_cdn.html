@@ -1,0 +1,62 @@
+{% extends "admin/base.html" %}
+{% from 'bootstrap5/form.html' import render_form,render_hidden_errors %}
+{% from 'bootstrap5/utils.html' import render_messages %}
+{% block head_add %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tabs.css') }}">
+    <script src="{{ url_for('static', filename='js/flush_tabs.js') }}"></script>
+{% endblock %}
+{% block page_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>刷新CDN</h2>
+                {{ render_messages() }}
+                <div class="p-5 bg-white rounded shadow mb-5">
+                    <!-- Rounded tabs -->
+                    <ul id="myTab" role="tablist" class="nav nav-tabs nav-pills flex-column flex-sm-row text-center bg-light border-0 rounded-nav">
+                        <li class="nav-item flex-sm-fill">
+                            <a id="preset-tab" data-toggle="tab" style="cursor:pointer;" onClick="Tab_onClick('preset')" role="tab" aria-controls="home" aria-selected="true"
+                               class="nav-link border-0 text-uppercase font-weight-bold active">常用刷新</a>
+                        </li>
+                        <li class="nav-item flex-sm-fill">
+                            <a id="custom_flush-tab" data-toggle="tab" style="cursor:pointer;" onClick="Tab_onClick('custom_flush')" role="tab" aria-controls="profile" aria-selected="false"
+                               class="nav-link border-0 text-uppercase font-weight-bold">自定义刷新</a>
+                        </li>
+                        <li class="nav-item flex-sm-fill">
+                            <a id="custom_get-tab" data-toggle="tab" style="cursor:pointer;" onClick="Tab_onClick('custom_get')" role="tab" aria-controls="contact" aria-selected="false"
+                               class="nav-link border-0 text-uppercase font-weight-bold">自定义预取</a>
+                        </li>
+                    </ul>
+                    <div id="myTabContent" class="tab-content">
+                        <div id="preset" role="tabpanel" aria-labelledby="home-tab" class="tab-pane fade px-4 py-5 show active">
+                            <div style="margin-bottom:2px;">
+                                <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._flush_Plugin_Master') }}'">
+                                    刷新PluginMaster
+                                </button>
+                            </div>
+                            <div style="margin-bottom:2px;">
+                                <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._flush_Asset_Meta') }}'">
+                                    刷新/Dalamud/Asset/Meta
+                                </button>
+                            </div>
+                            <div style="margin-bottom:2px;">
+                                <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._flush_XL_Release') }}'">
+                                    刷新/Proxy/Update/Release/RELEASES
+                                </button>
+                            </div>
+                        </div>
+                        <div id="custom_flush" role="tabpanel" aria-labelledby="profile-tab" class="tab-pane fade px-4 py-5">
+                            {{ render_hidden_errors(form_flush) }}
+                            {{ render_form(form_flush,form_type ="horizontal") }}
+                        </div>
+                        <div id="custom_get" role="tabpanel" aria-labelledby="contact-tab" class="tab-pane fade px-4 py-5">
+                            {{ render_hidden_errors(form_get) }}
+                            {{ render_form(form_get,form_type ="horizontal") }}
+                        </div>
+                    </div>
+                    <!-- End rounded tabs -->
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

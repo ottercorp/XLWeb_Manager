@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    {% block head %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {% block styles %}
+            {{ bootstrap.load_css() }}
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/Navigation-with-Button.css') }}">
+            <link rel="stylesheet" href="{{ url_for('static', filename='css/Navigation-Clean.css') }}">
+        {% endblock %}
+
+        <title>XLWeb Manager</title>
+    {% endblock %}
+    {% block head_add %}
+    {% endblock %}
+</head>
+<body>
+{% block navbar %}
+    <div class="navbar navbar-light navbar-expand-md navigation-clean-button" style="background: rgb(47,53,58);">
+        <div class="container"><a class="navbar-brand" href="{{ url_for('plugin_master._plugin_status') }}"
+                                  style="color: white;font-size: var(--bs-gutter-x,2.0rem);">XLWeb Manager</a>
+            <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navcol-2"><span
+                    class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div id="navcol-2" class="collapse navbar-collapse" style="border-color: rgb(47,53,58);">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('plugin_master._plugin_status') }}" id="index">插件状态</a></li>
+{#                    <li class="nav-item"><a class="nav-link" href="{{ url_for('front._config') }}" id="config">修改设置</a></li>#}
+{#                    <li class="nav-item"><a class="nav-link" href="{{ url_for('front._flush') }}" id="flush">刷新缓存</a></li>#}
+{#                    <li class="nav-item"><a class="nav-link" href="{{ url_for('front._analytics') }}" id="analytics">可视化分析</a></li>#}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <p></p>
+{% endblock %}
+
+{% block page_content %}
+{% endblock %}
+{% block scripts %}
+    {{ bootstrap.load_js() }}
+    <script src="{{ url_for('static', filename='js/change_nav_active.js') }}"></script>
+{% endblock %}
+</body>
+</html>

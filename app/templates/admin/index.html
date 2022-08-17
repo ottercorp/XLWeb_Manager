@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+
+{% block page_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>XLWeb服务状态：
+                    {% if stauts == "running" %}
+                        <span style="color:green">{{ stauts }}</span>
+                    {% else %}
+                        <span style="color:red">{{ stauts }}</span>
+                    {% endif %}</h2>
+                <p>{% for i in message %}
+                    {{ i }}<br/>
+                {% endfor %}
+                </p>
+                <div style="margin-bottom:2px; float: left;">
+                    <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._main_website') }}'">刷新状态
+                    </button>
+                    <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._download_logs') }}'">下载日志
+                    </button>
+                </div>
+                <div style="margin-bottom:2px; float: right;">
+                    <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._start_svr') }}'">开启服务
+                    </button>
+                    <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._stop_svr') }}'">关闭服务
+                    </button>
+                    <button class="btn btn-primary px-2 py-1" type="button" style="font-size: 14px;" onclick="window.location.href='{{ url_for( 'front._restart_svr') }}'">重启服务
+                    </button>
+                </div>
+
+            </div>
+            <br/>
+        </div>
+    </div>
+{% endblock %}
