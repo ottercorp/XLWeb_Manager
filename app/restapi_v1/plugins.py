@@ -12,15 +12,17 @@ import httpx
 from . import api
 
 resource_fields = {
-    'msg': fields.String,
+    'message': fields.String,
+    'status': fields.Integer,
     'task': fields.String,
 }
 
 
 class PluginMasterSiteDao(object):
-    def __init__(self, msg: str, task: str):
+    def __init__(self, msg: str, task: str, status: int = 200):
         self.msg = msg
         self.task = task
+        self.status = status
 
 
 class PluginMasterSite(Resource):
@@ -58,15 +60,16 @@ class PluginMasterSite(Resource):
                 'last_update': i['LastUpdate'],
                 'api_level': i['DalamudApiLevel']
             }
-        result_main = dict(sorted(result_main.items(), key=lambda x: x[0]))
-        result_test = dict(sorted(result_test.items(), key=lambda x: x[0]))
-        result_all = dict(sorted(result_all.items(), key=lambda x: x[0]))
         with open(r'./cache/plugin_master_main.json', 'w', encoding='utf-8-sig') as f:
+            result_main = dict(sorted(result_main.items(), key=lambda x: x[0]))
             json.dump(result_main, f, ensure_ascii=False, indent=4)
         with open(r'./cache/plugin_master_testing.json', 'w', encoding='utf-8-sig') as f:
+            result_test = dict(sorted(result_test.items(), key=lambda x: x[0]))
             json.dump(result_test, f, ensure_ascii=False, indent=4)
         with open(r'./cache/plugin_master_all.json', 'w', encoding='utf-8-sig') as f:
+            result_all = dict(sorted(result_all.items(), key=lambda x: x[0]))
             json.dump(result_all, f, ensure_ascii=False, indent=4)
+
         return PluginMasterSiteDao(msg='success', task='flush plugin master site.')
 
 
