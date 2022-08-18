@@ -8,34 +8,15 @@ import json
 import time
 
 from flask import render_template, request, flash
-import httpx
 
 from . import plugin_master
 
 
 @plugin_master.route('/plugin_status')
 def _plugin_status():
-    plugin_master_json = httpx.get('https://aonyx.ffxiv.wang/Plugin/PluginMaster').json()
-    result_main = {}
-    result_test = {}
-    for i in plugin_master_json:
-        if i['IsTestingExclusive'] is False:
-            result_main[i['Name']] = {
-                'is_test': i['IsTestingExclusive'],
-                'is_hidden': i['IsHide'],
-                'version': i['AssemblyVersion'],
-                'Test_Version': i['TestingAssemblyVersion'],
-                'last_update': i['LastUpdate'],
-                'api_level': i['DalamudApiLevel'],
-                'description': i['Description']
-            }
-        else:
-            result_test[i['Name']] = {
-                'is_test': i['IsTestingExclusive'],
-                'is_hidden': i['IsHide'],
-                'version': i['AssemblyVersion'],
-                'Test_Version': i['TestingAssemblyVersion'],
-                'last_update': i['LastUpdate'],
-                'api_level': i['DalamudApiLevel']
-            }
+    with open(r'./cache/plugin_master_main.json', 'r', encoding='utf-8-sig') as f:
+        result_main = json.load(f)
+    with open(r'./cache/plugin_master_testing.json', 'r', encoding='utf-8-sig') as f:
+        result_test = json.load(f)
+    print(result_main)
     return render_template(r'user/plugin_status.html', plugin_master_main=result_main, plugin_master_test=result_test)
