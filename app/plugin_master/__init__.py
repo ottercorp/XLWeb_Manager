@@ -6,9 +6,9 @@
 # @File    : __init__.py.py
 from flask import Blueprint
 
-from app import auth,csrf
+from app import auth, csrf
 
-auth,csrf = auth,csrf
+auth, csrf = auth, csrf
 
 plugin_master = Blueprint("plugin_master", __name__)
 

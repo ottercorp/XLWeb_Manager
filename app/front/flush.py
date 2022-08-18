@@ -88,7 +88,7 @@ def _flush():
 @auth.login_required
 def _flush_Plugin_Master():
     try:
-        a = refresh(type=1, urls=['https://aonyx.ffxiv.wang/Plugin/PluginMaster','https://xlweb.ffxiv.wang/plugin_status'])
+        a = refresh(type=1, urls=['https://aonyx.ffxiv.wang/Plugin/PluginMaster', 'https://xlweb.ffxiv.wang/plugin_status'])
         flash(a[0], a[1])
     except Exception as e:
         flash(f"代码运行报错：{str(e)}", "error")
