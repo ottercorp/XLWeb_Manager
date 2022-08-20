@@ -92,7 +92,7 @@ def _flush_Plugin_Master():
         flash(a[0], a[1])
     except Exception as e:
         flash(f"代码运行报错：{str(e)}", "error")
-    return redirect(url_for("front._flush"))
+    return redirect(url_for("admins._flush"))
 
 
 @admins.route('/flush/Asset_Meta', methods=['GET', 'POST'])
@@ -103,7 +103,7 @@ def _flush_Asset_Meta():
         flash(a[0], a[1])
     except Exception as e:
         flash(f"代码运行报错：{str(e)}", "error")
-    return redirect(url_for("front._flush"))
+    return redirect(url_for("admins._flush"))
 
 
 @admins.route('/flush/XL_Release', methods=['GET', 'POST'])
@@ -114,4 +114,4 @@ def _flush_XL_Release():
         flash(a[0], a[1])
     except Exception as e:
         flash(f"代码运行报错：{str(e)}", "error")
-    return redirect(url_for("front._flush"))
+    return redirect(url_for("admins._flush"))
