@@ -19,8 +19,8 @@ resource_fields = {
 
 
 class PluginMasterSiteDao(object):
-    def __init__(self, msg: str, task: str, status: int = 200):
-        self.msg = msg
+    def __init__(self, message: str, task: str, status: int = 200):
+        self.message = message
         self.task = task
         self.status = status
 
@@ -70,7 +70,7 @@ class PluginMasterSite(Resource):
             result_all = dict(sorted(result_all.items(), key=lambda x: x[0]))
             json.dump(result_all, f, ensure_ascii=False, indent=4)
 
-        return PluginMasterSiteDao(msg='success', task='flush plugin master site.')
+        return PluginMasterSiteDao(message='success', task='flush plugin master site.')
 
 
 api.add_resource(PluginMasterSite, '/plugin_master_site', endpoint='plugin_master_site')

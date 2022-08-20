@@ -105,7 +105,7 @@ class LogAnalysis(Resource):
             msg = analysis(file_object)
         except BaseException:
             return {'message': '分析失败，请确定日志文件是否是dalamud.log', 'status': 500, 'task': 'dalamud日志分析'}, 500
-        return {'message': analysis(file_object), 'status': 200, 'task': 'dalamud日志分析'}
+        return {'message': msg, 'status': 200, 'task': 'dalamud日志分析'}
 
 
 api.add_resource(LogAnalysis, '/logAnalysis', endpoint="logAnalysis")
