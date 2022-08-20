@@ -137,5 +137,6 @@ dmypy.json
 /appsettings.json
 # 自定义
 /ctcdn_api/
-
+# 缓存文件夹
+/cache/
 
