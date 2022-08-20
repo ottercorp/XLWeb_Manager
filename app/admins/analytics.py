@@ -9,7 +9,7 @@ import requests
 from . import admins, auth
 
 
-@front.route('/analytics')
+@admins.route('/analytics')
 @auth.login_required
 def _analytics():
     r = requests.get("http://localhost:3000/goto/uhhVP8C7z?orgId=1", allow_redirects=True)

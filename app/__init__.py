@@ -69,3 +69,6 @@ def verify_password(name, pwd):
     if name == username and pwd == password:
         return True
     return False
+
+
+app = create_app()

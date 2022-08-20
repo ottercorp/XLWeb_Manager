@@ -1,6 +1,4 @@
-from app import create_app
-
-app = create_app()
+from app import app
 
 # region 以下是抄的，不知道是啥，能用就行
 # set default button sytle and size, will be overwritten by macro parameters
