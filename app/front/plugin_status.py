@@ -9,10 +9,10 @@ import time
 
 from flask import render_template, request, flash
 
-from . import plugin_master
+from . import front
 
 
-@plugin_master.route('/plugin_status')
+@front.route('/plugin_status')
 def _plugin_status():
     with open(r'./cache/plugin_master_main.json', 'r', encoding='utf-8-sig') as f:
         result_main = json.load(f)

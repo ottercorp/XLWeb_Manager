@@ -32,4 +32,4 @@ def check_secret(func):
 api_bp = Blueprint("api", __name__)
 api = Api(api_bp, decorators=[csrf.exempt, check_secret], errors=errors)
 
-from . import plugins
+from . import plugins, log_analysis

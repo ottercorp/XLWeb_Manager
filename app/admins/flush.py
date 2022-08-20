@@ -12,7 +12,7 @@ from wtforms import StringField, RadioField, SubmitField
 from wtforms.validators import DataRequired, URL
 
 from app.utils.CDNCtrl import refresh, preload
-from . import front, auth
+from . import admins, auth
 
 
 class Flush_Form(FlaskForm):
@@ -26,7 +26,7 @@ class Get_Form(FlaskForm):
     submit = SubmitField("提交预取")
 
 
-@front.route('/flush', methods=['GET', 'POST'])
+@admins.route('/flush', methods=['GET', 'POST'])
 @auth.login_required
 def _flush():
     form_flush = Flush_Form()
@@ -84,7 +84,7 @@ def _flush():
     return render_template("admin/flush_cdn.html", form_flush=form_flush, form_get=form_get)
 
 
-@front.route('/flush/PluginMaster', methods=['GET', 'POST'])
+@admins.route('/flush/PluginMaster', methods=['GET', 'POST'])
 @auth.login_required
 def _flush_Plugin_Master():
     try:
@@ -95,7 +95,7 @@ def _flush_Plugin_Master():
     return redirect(url_for("front._flush"))
 
 
-@front.route('/flush/Asset_Meta', methods=['GET', 'POST'])
+@admins.route('/flush/Asset_Meta', methods=['GET', 'POST'])
 @auth.login_required
 def _flush_Asset_Meta():
     try:
@@ -106,7 +106,7 @@ def _flush_Asset_Meta():
     return redirect(url_for("front._flush"))
 
 
-@front.route('/flush/XL_Release', methods=['GET', 'POST'])
+@admins.route('/flush/XL_Release', methods=['GET', 'POST'])
 @auth.login_required
 def _flush_XL_Release():
     try:

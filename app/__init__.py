@@ -53,10 +53,10 @@ def create_app():
     app.config["API_SECRET"] = appsettings['API_SECRET']
 
     # 注册蓝图
+    from app.admins import admins as admins_blueprint
+    app.register_blueprint(admins_blueprint)
     from app.front import front as front_blueprint
     app.register_blueprint(front_blueprint)
-    from app.plugin_master import plugin_master as plugin_master_blueprint
-    app.register_blueprint(plugin_master_blueprint)
     from app.restapi_v1 import api_bp as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1.0')
 

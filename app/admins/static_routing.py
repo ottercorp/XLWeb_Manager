@@ -9,10 +9,10 @@ import subprocess
 
 from flask import render_template, send_file
 
-from . import front, auth
+from . import admins, auth
 
 
-@front.route('/')
+@admins.route('/')
 @auth.login_required
 def _main_website():
     try:
@@ -25,7 +25,7 @@ def _main_website():
     return render_template(r'admin/index.html', stauts=result_stauts, message=result_list)
 
 
-@front.route('/start', methods=["GET", "POST"])
+@admins.route('/start', methods=["GET", "POST"])
 @auth.login_required
 def _start_svr():
     result = subprocess.getoutput("systemctl start XLWebServices")
@@ -35,7 +35,7 @@ def _start_svr():
     return render_template(r'admin/index.html', stauts=result_stauts, message=result_list)
 
 
-@front.route('/restart', methods=["GET", "POST"])
+@admins.route('/restart', methods=["GET", "POST"])
 @auth.login_required
 def _restart_svr():
     result = subprocess.getoutput("systemctl restart XLWebServices")
@@ -45,7 +45,7 @@ def _restart_svr():
     return render_template(r'admin/index.html', stauts=result_stauts, message=result_list)
 
 
-@front.route('/stop', methods=["GET", "POST"])
+@admins.route('/stop', methods=["GET", "POST"])
 @auth.login_required
 def _stop_svr():
     result = subprocess.getoutput("systemctl stop XLWebServices")
@@ -55,7 +55,7 @@ def _stop_svr():
     return render_template(r'admin/index.html', stauts=result_stauts, message=result_list)
 
 
-@front.route('/download_logs', methods=["GET", "POST"])
+@admins.route('/download_logs', methods=["GET", "POST"])
 @auth.login_required
 def _download_logs():
     result = subprocess.getoutput("journalctl -xe -u XLWebServices")

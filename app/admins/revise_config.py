@@ -13,7 +13,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, RadioField, SubmitField, IntegerField, URLField
 from wtforms.validators import DataRequired, URL, NumberRange
 
-from . import front, auth
+from . import admins, auth
 
 
 class Config_Form(FlaskForm):
@@ -47,7 +47,7 @@ class Config_Form(FlaskForm):
     submit = SubmitField("修改")
 
 
-@front.route('/config', methods=['GET', 'POST'])
+@admins.route('/config', methods=['GET', 'POST'])
 @auth.login_required
 def _config():
     try:

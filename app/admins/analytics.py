@@ -6,7 +6,7 @@
 # @File    : analytics.py
 import requests
 
-from . import front, auth
+from . import admins, auth
 
 
 @front.route('/analytics')
