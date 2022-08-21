@@ -4,6 +4,7 @@
 # @Time    : 2022/6/10 15:11
 # @Author  : subjadeites
 # @File    : __init__.py.py
+
 from flask import Blueprint
 
 from app import auth, csrf

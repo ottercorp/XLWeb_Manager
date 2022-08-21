@@ -4,6 +4,7 @@
 # @Time    : 2022/6/12 17:36
 # @Author  : subjadeites
 # @File    : analytics.py
+
 import requests
 
 from . import admins, auth

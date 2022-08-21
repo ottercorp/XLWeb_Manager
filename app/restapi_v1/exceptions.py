@@ -3,7 +3,6 @@
 # cython:language_level=3
 # @Time    : 2022/8/18 16:12
 # @File    : exceptions.py
-from flask_restful import fields
 from werkzeug.exceptions import HTTPException
 
 errors = {

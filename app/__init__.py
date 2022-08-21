@@ -4,11 +4,12 @@
 # @Time    : 2022/6/10 15:07
 # @Author  : subjadeites
 # @File    : __init__.py.py
+
 import json
 
 from flask import Flask
-from flask_cors import CORS
 from flask_bootstrap import Bootstrap5
+from flask_cors import CORS
 from flask_httpauth import HTTPBasicAuth
 from flask_login import LoginManager
 from flask_wtf.csrf import CSRFProtect

@@ -6,8 +6,8 @@
 from flask import request
 from flask_restful import Resource, fields, marshal_with
 
-from . import api
 from app.utils.dalamud_log_analysis import analysis
+from . import api
 
 
 class LogAnalysis(Resource):

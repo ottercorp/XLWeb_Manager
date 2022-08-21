@@ -4,7 +4,9 @@
 # @Time    : 2022/8/20 23:22
 # @Author  : subjadeites
 # @File    : gun.py
+
 import gevent.monkey
+
 gevent.monkey.patch_all()
 
 import multiprocessing
@@ -15,7 +17,7 @@ bind = '0.0.0.0:6000'
 pidfile = 'logs/gunicorn.pid'
 logfile = 'logs/debug.log'
 
-#启动的进程数
+# 启动的进程数
 workers = multiprocessing.cpu_count()
 worker_class = 'gunicorn.workers.ggevent.GeventWorker'
 

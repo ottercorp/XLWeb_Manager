@@ -6,6 +6,7 @@
 # @File    : __init__.py.py
 
 from functools import wraps
+
 from flask import Blueprint, request, current_app
 from flask_restful import Api
 

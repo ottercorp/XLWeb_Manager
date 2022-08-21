@@ -4,8 +4,9 @@
 # @Time    : 2022/8/21 16:58
 # @Author  : subjadeites
 # @File    : dalamud_log_analysis.py
-import json
+
 import base64
+import json
 
 import pandas as pd
 
