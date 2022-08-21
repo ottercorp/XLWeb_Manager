@@ -12,4 +12,4 @@ auth, csrf = auth, csrf
 
 front = Blueprint("front", __name__)
 
-from . import plugin_status
+from . import plugin_status,upload_dalamud_log

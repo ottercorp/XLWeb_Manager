@@ -76,12 +76,12 @@ def analysis(file_object):
                                            'DalamudApiLevel': i['DalamudApiLevel'],
                                            }
     troubleshooting.pop('LoadedPlugins')
-    result = {'last_exception': last_exception,
-              'main_plugin_list': main_plugin_list,
-              'testing_plugin_list': testing_plugin_list,
-              'third_party_plugin_list': third_party_plugin_list,
+    result = {'Last_exception': last_exception,
+              'Main_plugins': main_plugin_list,
+              'Testing_plugins': testing_plugin_list,
+              'Third_party_plugins': third_party_plugin_list,
               **troubleshooting,
-              **LoadedPlugins_dict,
-              'disabled_plugins_list': disabled_plugins_list, }
+              'loadedPlugins': LoadedPlugins_dict,
+              'Disabled_plugins': disabled_plugins_list, }
 
     return result
