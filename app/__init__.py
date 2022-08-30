@@ -52,6 +52,7 @@ def create_app():
     app.config["SECRET_KEY"] = appsettings['Flask_SECRET_KEY']
     app.config["WTF_CSRF_SECRET_KEY "] = appsettings['Flask_WTF_CSRF_SECRET_KEY']
     app.config["API_SECRET"] = appsettings['API_SECRET']
+    app.config["DALAMUD_API_LEVEL"] = appsettings['DALAMUD_API_LEVEL']
 
     # 注册蓝图
     from app.admins import admins as admins_blueprint

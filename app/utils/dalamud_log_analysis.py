@@ -11,7 +11,7 @@ import json
 import pandas as pd
 
 
-def analysis(file_object):
+def analysis(file_object, api_level: int = 6):
     """分析日志方法
 
     Arguments:
@@ -66,6 +66,9 @@ def analysis(file_object):
         elif i['IsThirdParty'] is False:
             main_plugin_list.append(plugin_name)
             temp_dict['plugin_status'] = "main"
+        elif i['DalamudApiLevel'] != api_level:
+            disabled_plugins_list.append(plugin_name)
+            temp_dict['plugin_status'] = "error_api_level"
         else:
             third_party_plugin_list.append(plugin_name)
             temp_dict['plugin_status'] = "3rd"

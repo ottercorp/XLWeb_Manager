@@ -8,7 +8,7 @@
 import base64
 import json
 
-from flask import render_template, request, redirect, url_for, jsonify, flash
+from flask import render_template, request, redirect, url_for, jsonify, flash, current_app
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
@@ -30,7 +30,7 @@ def _upload_dalamud_log():
         file = request.files['file']
         if file and file.filename != '':
             try:
-                analysis_result = analysis(file)
+                analysis_result = analysis(file,current_app.config['DALAMUD_API_LEVEL'])
                 if 'Penumbra' in analysis_result['Third_party_plugins']:
                     flash('90%的报错都是因为Penumbra加载了不恰当的MOD导致，请停用Penumbra后试试是否还会报错。', 'warning')
                     flash('请将分析后的网页地址复制给相关人员，链接有效期为一天。', 'info')
