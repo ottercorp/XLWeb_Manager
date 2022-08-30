@@ -89,7 +89,7 @@ def _flush():
 def _flush_Plugin_Master():
     try:
         a = httpx.post(f'{localhost()}/api/v1.0/plugin_master_site',headers={'api-secret':current_app.config['API_SECRET']}).json()
-        flash(f"{a['task']} {a['message']}")
+        flash(f"{a['data']['msg']} {a['message']}")
         a = refresh(type=1, urls=['https://aonyx.ffxiv.wang/Plugin/PluginMaster', 'https://xlweb.ffxiv.wang/plugin_status'])
         flash(a[0], a[1])
     except Exception as e:
