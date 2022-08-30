@@ -45,7 +45,7 @@ def _upload_dalamud_log():
                 short_url = save_log(msg)
                 return redirect(url_for('front._log_result_short', short_url=short_url))
             except Exception as e:
-                print(e)
+                print(e)  # TODO: 异常日志打印
                 flash('文件解析失败，请检查是否是dalamud.log。', 'error')
                 return redirect(url_for('front._upload_dalamud_log'))
         else:

@@ -108,7 +108,7 @@ def do_post(path, params):
         params), headers=headers, verify=False)
     msg = response.json()["message"]
     if msg == 'success':
-        return (msg, 'info')
+        return (msg, 'message')
     else:
         return (msg, 'error')
 

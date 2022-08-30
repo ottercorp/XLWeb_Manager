@@ -7,28 +7,15 @@
 import json
 
 import httpx
-from flask_restful import Resource, fields, marshal_with
+from flask_restful import Resource, marshal_with
 
-from . import api
-
-resource_fields = {
-    'message': fields.String,
-    'status': fields.Integer,
-    'task': fields.String,
-}
-
-
-class PluginMasterSiteDao(object):
-    def __init__(self, message: str, task: str, status: int = 200):
-        self.message = message
-        self.task = task
-        self.status = status
+from . import api, localhost, DefaultApiResponse, resource_fields
 
 
 class PluginMasterSite(Resource):
     @marshal_with(resource_fields)
     def post(self):
-        plugin_master_json = httpx.get('https://aonyx.ffxiv.wang/Plugin/PluginMaster', timeout=10).json()
+        plugin_master_json = httpx.get(f'{localhost(False)}/Plugin/PluginMaster', timeout=10).json()
         result_main = {}
         result_test = {}
         result_all = {}
@@ -70,7 +57,7 @@ class PluginMasterSite(Resource):
             result_all = dict(sorted(result_all.items(), key=lambda x: x[0]))
             json.dump(result_all, f, ensure_ascii=False, indent=4)
 
-        return PluginMasterSiteDao(message='success', task='flush plugin master site.')
+        return DefaultApiResponse(data={'msg': 'flush plugin master site success'}, code=200)
 
 
 api.add_resource(PluginMasterSite, '/plugin_master_site', endpoint='plugin_master_site')

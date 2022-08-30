@@ -1,4 +1,4 @@
-from app import app
+from app import app, appsettings
 
 # region 以下是抄的，不知道是啥，能用就行
 # set default button sytle and size, will be overwritten by macro parameters
@@ -14,4 +14,4 @@ app.config['BOOTSTRAP_TABLE_NEW_TITLE'] = 'Create'
 # endregion
 
 if __name__ == '__main__':
-    app.run(debug=False, host='127.0.0.1', port=6000)
+    app.run(debug=False, host='127.0.0.1', port=appsettings['PORT'])

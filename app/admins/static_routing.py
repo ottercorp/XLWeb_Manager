@@ -8,7 +8,7 @@
 import re
 import subprocess
 
-from flask import render_template, send_file
+from flask import render_template, send_file, redirect, url_for
 
 from . import admins, auth
 
@@ -33,7 +33,7 @@ def _start_svr():
     result = subprocess.getoutput("systemctl status XLWebServices")
     result_list = result.split("\n")
     result_stauts = re.split(r'[()]', result_list[2])[1]
-    return render_template(r'admin/index.html', stauts=result_stauts, message=result_list)
+    return redirect(url_for("admins._main_website",stauts=result_stauts, message=result_list))
 
 
 @admins.route('/restart', methods=["GET", "POST"])
@@ -43,7 +43,7 @@ def _restart_svr():
     result = subprocess.getoutput("systemctl status XLWebServices")
     result_list = result.split("\n")
     result_stauts = re.split(r'[()]', result_list[2])[1]
-    return render_template(r'admin/index.html', stauts=result_stauts, message=result_list)
+    return redirect(url_for("admins._main_website", stauts=result_stauts, message=result_list))
 
 
 @admins.route('/stop', methods=["GET", "POST"])
@@ -53,7 +53,7 @@ def _stop_svr():
     result = subprocess.getoutput("systemctl status XLWebServices")
     result_list = result.split("\n")
     result_stauts = re.split(r'[()]', result_list[2])[1]
-    return render_template(r'admin/index.html', stauts=result_stauts, message=result_list)
+    return redirect(url_for("admins._main_website", stauts=result_stauts, message=result_list))
 
 
 @admins.route('/download_logs', methods=["GET", "POST"])

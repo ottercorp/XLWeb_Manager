@@ -4,8 +4,9 @@
 # @Time    : 2022/8/22 0:25
 # @Author  : subjadeites
 # @File    : main_func.py
-import redis
 import secrets
+
+import redis
 
 redis_pool = redis.ConnectionPool(host='127.0.0.1', port=6379, password='', db=0)
 

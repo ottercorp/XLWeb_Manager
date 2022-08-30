@@ -72,4 +72,24 @@ def verify_password(name, pwd):
     return False
 
 
+def localhost(is_manager: bool = True):
+    """注册localhost路径，测试环境时返回远程地址
+
+    Arguments:
+        is_manager {bool} -- 是否是xlweb.ffxiv.wang。
+
+    Returns:
+        str -- 返回本地地址或远程地址
+    """
+    #
+    if app.debug:
+        if not is_manager:
+            return 'https://aonyx.ffxiv.wang'
+        return 'https://xlweb.ffxiv.wang'
+    else:
+        if not is_manager:
+            return 'http://127.0.0.1:5000'
+        return f"http://127.0.0.1:{appsettings['PORT']}"
+
+
 app = create_app()

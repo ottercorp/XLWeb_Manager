@@ -11,8 +11,8 @@ gevent.monkey.patch_all()
 
 import multiprocessing
 
-debug = True
-loglevel = 'deubg'
+debug = False
+loglevel = 'debug'
 bind = '0.0.0.0:6000'
 pidfile = 'logs/gunicorn.pid'
 logfile = 'logs/debug.log'

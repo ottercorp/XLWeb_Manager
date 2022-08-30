@@ -4,29 +4,24 @@
 # @Time    : 2022/8/19 17:53
 # @File    : log_analysis.py
 from flask import request
-from flask_restful import Resource, fields, marshal_with
+from flask_restful import Resource, marshal_with
 
 from app.utils.dalamud_log_analysis import analysis
-from . import api
+from . import api, resource_fields, DefaultApiResponse
 
 
 class LogAnalysis(Resource):
     """日志分析接口"""
 
-    @marshal_with(fields={
-        'message': fields.Raw,
-        'status': fields.Integer,
-        'task': fields.String,
-    }
-    )
+    @marshal_with(resource_fields)
     def post(self):
         """分析日志方法"""
         file_object = request.files['file']
         try:
             msg = analysis(file_object)
         except BaseException:
-            return {'message': '分析失败，请确定日志文件是否是dalamud.log', 'status': 500, 'task': 'dalamud日志分析'}, 500
-        return {'message': msg, 'status': 200, 'task': 'dalamud日志分析'}
+            return DefaultApiResponse(data=None, message='分析失败，请确定日志文件是否是dalamud.log', code=500), 500
+        return DefaultApiResponse(data=msg)
 
 
 api.add_resource(LogAnalysis, '/logAnalysis', endpoint="logAnalysis")

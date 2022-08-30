@@ -5,14 +5,14 @@
 # @Author  : subjadeites
 # @File    : flush.py
 
-import requests
-from flask import render_template, redirect, url_for, flash, request
+import httpx
+from flask import render_template, redirect, url_for, flash, request, current_app
 from flask_wtf import FlaskForm
 from wtforms import StringField, RadioField, SubmitField
 from wtforms.validators import DataRequired, URL
 
 from app.utils.CDNCtrl import refresh, preload
-from . import admins, auth
+from . import admins, auth, localhost
 
 
 class Flush_Form(FlaskForm):
@@ -50,7 +50,7 @@ def _flush():
         # 确认域名是否是https://aonyx.ffxiv.wang/
         if url.startswith('https://aonyx.ffxiv.wang/'):
             try:
-                response = requests.get(url)
+                response = httpx.get(url)
                 print(response.status_code)
                 assert response.status_code == 200  # 查看url是否能访问
                 # 每次提交成功，都会清空刷新地址
@@ -69,7 +69,7 @@ def _flush():
         # 确认域名是否是https://aonyx.ffxiv.wang/
         if url.startswith('https://aonyx.ffxiv.wang/'):
             try:
-                response = requests.get(url)
+                response = httpx.get(url)
                 print(response.status_code)
                 assert response.status_code == 200  # 查看url是否能访问
                 # 每次提交成功，都会清空刷新地址
@@ -88,6 +88,8 @@ def _flush():
 @auth.login_required
 def _flush_Plugin_Master():
     try:
+        a = httpx.post(f'{localhost()}/api/v1.0/plugin_master_site',headers={'api-secret':current_app.config['API_SECRET']}).json()
+        flash(f"{a['task']} {a['message']}")
         a = refresh(type=1, urls=['https://aonyx.ffxiv.wang/Plugin/PluginMaster', 'https://xlweb.ffxiv.wang/plugin_status'])
         flash(a[0], a[1])
     except Exception as e:

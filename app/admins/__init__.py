@@ -7,9 +7,9 @@
 
 from flask import Blueprint
 
-from app import auth, csrf
+from app import auth, csrf, localhost
 
-auth, csrf = auth, csrf
+auth, csrf, localhost = auth, csrf, localhost
 
 admins = Blueprint("admins", __name__)
 
