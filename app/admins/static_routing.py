@@ -29,31 +29,22 @@ def _main_website():
 @admins.route('/start', methods=["GET", "POST"])
 @auth.login_required
 def _start_svr():
-    result = subprocess.getoutput("systemctl start XLWebServices")
-    result = subprocess.getoutput("systemctl status XLWebServices")
-    result_list = result.split("\n")
-    result_stauts = re.split(r'[()]', result_list[2])[1]
-    return redirect(url_for("admins._main_website",stauts=result_stauts, message=result_list))
+    subprocess.getoutput("systemctl start XLWebServices")
+    return redirect(url_for("admins._main_website"))
 
 
 @admins.route('/restart', methods=["GET", "POST"])
 @auth.login_required
 def _restart_svr():
-    result = subprocess.getoutput("systemctl restart XLWebServices")
-    result = subprocess.getoutput("systemctl status XLWebServices")
-    result_list = result.split("\n")
-    result_stauts = re.split(r'[()]', result_list[2])[1]
-    return redirect(url_for("admins._main_website", stauts=result_stauts, message=result_list))
+    subprocess.getoutput("systemctl restart XLWebServices")
+    return redirect(url_for("admins._main_website"))
 
 
 @admins.route('/stop', methods=["GET", "POST"])
 @auth.login_required
 def _stop_svr():
-    result = subprocess.getoutput("systemctl stop XLWebServices")
-    result = subprocess.getoutput("systemctl status XLWebServices")
-    result_list = result.split("\n")
-    result_stauts = re.split(r'[()]', result_list[2])[1]
-    return redirect(url_for("admins._main_website", stauts=result_stauts, message=result_list))
+    subprocess.getoutput("systemctl stop XLWebServices")
+    return redirect(url_for("admins._main_website"))
 
 
 @admins.route('/download_logs', methods=["GET", "POST"])
