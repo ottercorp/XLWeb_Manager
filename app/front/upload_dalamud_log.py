@@ -14,7 +14,7 @@ from flask_wtf.file import FileField, FileRequired, FileAllowed
 from wtforms import SubmitField
 
 from app.utils.dalamud_log_analysis import analysis
-from redis_db import save_log, read_short_url
+from redis_db import save_log, read_log_short_url
 from . import front
 
 
@@ -57,7 +57,7 @@ def _upload_dalamud_log():
 
 @front.get('/log/<short_url>')
 def _log_result_short(short_url):
-    redis_result = read_short_url(short_url)
+    redis_result = read_log_short_url(short_url)
     if redis_result is not None:
         try:
             msg = json.loads(base64.urlsafe_b64decode(redis_result))

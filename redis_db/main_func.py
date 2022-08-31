@@ -8,7 +8,7 @@ import secrets
 
 import redis
 
-redis_pool = redis.ConnectionPool(host='127.0.0.1', port=6379, password='', db=0)
+redis_pool = redis.ConnectionPool(host='127.0.0.1', port=6379, password='', db=1, decode_responses=True)
 
 
 def redis_connect():
@@ -30,7 +30,7 @@ def save_log(log_base64: str) -> str:
     return token
 
 
-def read_short_url(short_url: str) -> str:
+def read_log_short_url(short_url: str) -> str:
     """读取短网址
 
     Arguments:
@@ -40,5 +40,5 @@ def read_short_url(short_url: str) -> str:
         短网址对应的base64信息
     """
     redis_client = redis_connect()
-    result = redis_client.get(short_url).decode('utf8')
+    result = redis_client.get(short_url)
     return result
