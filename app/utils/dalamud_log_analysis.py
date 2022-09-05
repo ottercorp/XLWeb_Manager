@@ -28,6 +28,8 @@ def analysis(file_object, api_level: int = 6):
 
     # 将df的索引重新倒序排列
     last_exception = {}
+    second_last_exception = {}
+    third_last_exception = {}
     troubleshooting = {}
     # 循环遍历df的每一行
     for index, row in df.iterrows():
@@ -38,6 +40,8 @@ def analysis(file_object, api_level: int = 6):
             plain_text = base64.b64decode(base64_ciphertext)
             plain_dict = json.loads(plain_text)
             # 合并last_exception字典
+            third_last_exception.update(second_last_exception)
+            second_last_exception.update(last_exception)
             last_exception.update(plain_dict)
 
         # 如果message中包含“TROUBLESHOOTING”，则将该行的message存入troubleshooting字典中
@@ -79,12 +83,16 @@ def analysis(file_object, api_level: int = 6):
                                            'DalamudApiLevel': i['DalamudApiLevel'],
                                            }
     troubleshooting.pop('LoadedPlugins')
-    result = {'Last_exception': last_exception,
-              'Main_plugins': main_plugin_list,
-              'Testing_plugins': testing_plugin_list,
-              'Third_party_plugins': third_party_plugin_list,
-              **troubleshooting,
-              'loadedPlugins': LoadedPlugins_dict,
-              'Disabled_plugins': disabled_plugins_list, }
+    result = {
+        'Exception_Last': last_exception,
+        'Exception_Second_Last': second_last_exception,
+        'Exception_Third_Last': third_last_exception,
+        'Main_plugins': main_plugin_list,
+        'Testing_plugins': testing_plugin_list,
+        'Third_party_plugins': third_party_plugin_list,
+        **troubleshooting,
+        'loadedPlugins': LoadedPlugins_dict,
+        'Disabled_plugins': disabled_plugins_list,
+    }
 
     return result
