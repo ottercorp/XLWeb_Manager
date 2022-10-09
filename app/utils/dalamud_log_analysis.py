@@ -11,6 +11,23 @@ import json
 import pandas as pd
 
 
+def merge_message(df, index, start_index, drop_index_list):
+    """合并message
+
+    Args:
+        df (DataFrame): DataFrame
+        index (int): index
+
+    Returns:
+        len(next_index): 需要合并的信息的长度
+    """
+    next_line = df.loc[index + 1]['date']
+    # 将下一行的message合并到当前行
+    df.iloc[start_index]['message'] += next_line
+    drop_index_list.append(index + 1)
+    return len(next_line)
+
+
 def analysis(file_object, api_level: int = 6):
     """分析日志方法
 
@@ -22,9 +39,35 @@ def analysis(file_object, api_level: int = 6):
 
 
     """
-    df = pd.read_csv(file_object, delim_whitespace=True, index_col=False, names=['data', 'time', 'UTC', 'level', 'message'], on_bad_lines='skip', parse_dates=[0, 1])
+    df = pd.read_csv(file_object, delim_whitespace=True, index_col=False, names=['date', 'time', 'UTC', 'level', 'message'], on_bad_lines='skip', parse_dates=[0, 1])
     # 删除data列中不是日期且message低于30字符的行
-    df = df[(df['data'].str.contains('\d{4}-\d{2}-\d{2}')) & (df['message'].str.len() > 30)]
+    df = df[(((df['date'].str.contains('\d{4}-\d{2}-\d{2}')) & (df['message'].str.len() > 35)) | (df['time'].isna()))]
+    df = df.reset_index(drop=True)  # 重置index
+
+    # 循环遍历df的每一行，选出base64换行的进行合并，合并后删除；非换行的且非异常行删除。
+    # 单行未满10000个字符的换行不会被合并。TODO: 优化
+    drop_index_list = []
+    i = 0
+    while i < len(df):
+        row = df.iloc[i]
+        if pd.isna(row['time']):
+            drop_index_list.append(i)
+            i += 1
+            if i >= len(df):
+                break
+        # 如果message长度等于9963，说明下一行还有message，需要合并
+        elif len(row['message']) == 9963:
+            start_i = i
+            a = 10000
+            while a == 10000:
+                a = merge_message(df, i, start_i, drop_index_list)
+                i += 1
+            i += 1
+            if i >= len(df):
+                break
+        else:
+            i += 1
+    df.drop(drop_index_list, inplace=True)
 
     # 将df的索引重新倒序排列
     last_exception = {}
@@ -33,25 +76,28 @@ def analysis(file_object, api_level: int = 6):
     troubleshooting = {}
     # 循环遍历df的每一行
     for index, row in df.iterrows():
-        # 如果message中包含“LASTEXCEPTION”
-        if 'LASTEXCEPTION' in row['message']:
-            base64_ciphertext = row['message'].split(':')[1]
-            # 进行base64解码
-            plain_text = base64.b64decode(base64_ciphertext)
-            plain_dict = json.loads(plain_text)
-            # 合并last_exception字典
-            third_last_exception.update(second_last_exception)
-            second_last_exception.update(last_exception)
-            last_exception.update(plain_dict)
+        try:
+            # 如果message中包含“LASTEXCEPTION”
+            if 'LASTEXCEPTION' in row['message']:
+                base64_ciphertext = row['message'].split(':')[1]
+                # 进行base64解码
+                plain_text = base64.b64decode(base64_ciphertext)
+                plain_dict = json.loads(plain_text)
+                # 合并last_exception字典
+                third_last_exception.update(second_last_exception)
+                second_last_exception.update(last_exception)
+                last_exception.update(plain_dict)
 
-        # 如果message中包含“TROUBLESHOOTING”，则将该行的message存入troubleshooting字典中
-        if 'TROUBLESHOOTING' in row['message']:
-            base64_ciphertext = row['message'].split(':')[1]
-            # 进行base64解码
-            plain_text = base64.b64decode(base64_ciphertext)
-            plain_dict = json.loads(plain_text)
-            # 合并last_exception字典
-            troubleshooting.update(plain_dict)
+            # 如果message中包含“TROUBLESHOOTING”，则将该行的message存入troubleshooting字典中
+            elif 'TROUBLESHOOTING' in row['message']:
+                base64_ciphertext = row['message'].split(':')[1]
+                # 进行base64解码
+                plain_text = base64.b64decode(base64_ciphertext)
+                plain_dict = json.loads(plain_text)
+                # 合并last_exception字典
+                troubleshooting.update(plain_dict)
+        except:
+            pass  # 遇到傻逼不写满10k就换行的日志就跳过
     LoadedPlugins_list: list[dict] = troubleshooting.get('LoadedPlugins', [])
     LoadedPlugins_dict = {}
     main_plugin_list = []
