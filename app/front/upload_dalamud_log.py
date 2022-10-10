@@ -30,17 +30,20 @@ def _upload_dalamud_log():
         file = request.files['file']
         if file and file.filename != '':
             try:
-                analysis_result = analysis(file,current_app.config['DALAMUD_API_LEVEL'])
-                if 'Penumbra' in analysis_result['Third_party_plugins']:
-                    flash('90%的报错都是因为Penumbra加载了不恰当的MOD导致，请停用Penumbra后试试是否还会报错。', 'warning')
-                    flash('请将分析后的网页地址复制给相关人员，链接有效期为一天。', 'info')
-                    return render_template('user/upload_dalamud_log.html', form=upload_form)
-                elif analysis_result['Third_party_plugins'] != []:
-                    flash('该日志包含第三方插件，请删除你的第三方插件。', 'warning')
-                    flash(f'您启用的第三方插件如下：{analysis_result["Third_party_plugins"]}', 'warning')
-                    flash('第三方插件的支持频道并不在此处，想在此处寻求帮助请删除你的第三方插件。第三方插件会在插件管理器中图标的右下角有一个黄色的3。', 'warning')
-                    flash('请将分析后的网页地址复制给相关人员，链接有效期为一天。', 'info')
-                    return render_template('user/upload_dalamud_log.html', form=upload_form)
+                analysis_result, log_file_type = analysis(file, current_app.config['DALAMUD_API_LEVEL'])
+                if log_file_type == 0:
+                    if 'Penumbra' in analysis_result['Third_party_plugins']:
+                        flash('90%的报错都是因为Penumbra加载了不恰当的MOD导致，请停用Penumbra后试试是否还会报错。', 'warning')
+                        flash('请将分析后的网页地址复制给相关人员，链接有效期为一天。', 'info')
+                        return render_template('user/upload_dalamud_log.html', form=upload_form)
+                    elif analysis_result['Third_party_plugins'] != []:
+                        flash('该日志包含第三方插件，请删除你的第三方插件。', 'warning')
+                        flash(f'您启用的第三方插件如下：{analysis_result["Third_party_plugins"]}', 'warning')
+                        flash('第三方插件的支持频道并不在此处，想在此处寻求帮助请删除你的第三方插件。第三方插件会在插件管理器中图标的右下角有一个黄色的3。', 'warning')
+                        flash('请将分析后的网页地址复制给相关人员，链接有效期为一天。', 'info')
+                        return render_template('user/upload_dalamud_log.html', form=upload_form)
+                else:
+                    pass
                 msg = str(base64.urlsafe_b64encode(json.dumps(analysis_result).encode('utf-8')), 'utf-8')
                 short_url = save_log(msg)
                 return redirect(url_for('front._log_result_short', short_url=short_url))

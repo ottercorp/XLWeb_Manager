@@ -11,15 +11,15 @@ import json
 import pandas as pd
 
 
-def merge_message(df, index, start_index, drop_index_list):
+def merge_message(df, index, start_index, drop_index_list) -> int:
     """合并message
 
     Args:
-        df (DataFrame): DataFrame
-        index (int): index
+        df :DataFrame: 需要合并的DataFrame
+        index :int: 当前行的索引
 
     Returns:
-        len(next_index): 需要合并的信息的长度
+        需要合并的字符串长度
     """
     next_line = df.loc[index + 1]['date']
     # 将下一行的message合并到当前行
@@ -28,16 +28,19 @@ def merge_message(df, index, start_index, drop_index_list):
     return len(next_line)
 
 
-def analysis(file_object, api_level: int = 6):
+def analysis(file_object, api_level: int = 6) -> (dict,int|None):
     """分析日志方法
 
     Arguments:
-        file_object {file} -- 日志文件对象，需要具备read()方法
+        file_object :file: 日志文件对象，需要具备read()方法
+        api_level :int: api等级，目前支持6和7，6为当前使用的api，7为上游的api (default: {6})
 
     Returns:
-        dict -- {'last_exception': {last_exception}, **troubleshooting}
+        result,log_file_type
 
+    result :dict: 返回分析结果
 
+    log_file_type :int: 返回日志文件类型，None：未知，0：Dalamud，1：XIVLauncher
     """
     df = pd.read_csv(file_object, delim_whitespace=True, index_col=False, names=['date', 'time', 'UTC', 'level', 'message'], on_bad_lines='skip', parse_dates=[0, 1])
     # 删除data列中不是日期且message低于30字符的行
@@ -75,7 +78,7 @@ def analysis(file_object, api_level: int = 6):
     third_last_exception = {}
     troubleshooting = {}
     # 初始化日志标记
-    log_file_type = None # 0: Dalamud.log, 1: output.log/Dalamud.Updater.log
+    log_file_type = None  # 0: Dalamud.log, 1: output.log/Dalamud.Updater.log
     # 循环遍历df的每一行
     for index, row in df.iterrows():
         try:
@@ -150,7 +153,7 @@ def analysis(file_object, api_level: int = 6):
             'Third_party_plugins': third_party_plugin_list,
             'loadedPlugins': LoadedPlugins_dict,
             'disabled_plugins': disabled_plugins_list,
-            'troubleshooting':troubleshooting,
+            'troubleshooting': troubleshooting,
         }
     elif log_file_type == 1:
         result = {
@@ -161,4 +164,4 @@ def analysis(file_object, api_level: int = 6):
         }
     else:
         raise Exception("日志类型不支持或者无法判断日志类型。")
-    return result
+    return result, log_file_type
