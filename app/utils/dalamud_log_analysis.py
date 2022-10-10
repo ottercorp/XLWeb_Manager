@@ -74,6 +74,8 @@ def analysis(file_object, api_level: int = 6):
     second_last_exception = {}
     third_last_exception = {}
     troubleshooting = {}
+    # 初始化日志标记
+    log_file_type = None # 0: Dalamud.log, 1: output.log/Dalamud.Updater.log
     # 循环遍历df的每一行
     for index, row in df.iterrows():
         try:
@@ -90,6 +92,15 @@ def analysis(file_object, api_level: int = 6):
 
             # 如果message中包含“TROUBLESHOOTING”，则将该行的message存入troubleshooting字典中
             elif 'TROUBLESHOOTING' in row['message']:
+                log_file_type = 0  # 0: Dalamud.log, 1: output.log/Dalamud.Updater.log
+                base64_ciphertext = row['message'].split(':')[1]
+                # 进行base64解码
+                plain_text = base64.b64decode(base64_ciphertext)
+                plain_dict = json.loads(plain_text)
+                # 合并last_exception字典
+                troubleshooting.update(plain_dict)
+            elif 'TROUBLESHXLTING' in row['message']:
+                log_file_type = 1  # 0: Dalamud.log, 1: output.log/Dalamud.Updater.log
                 base64_ciphertext = row['message'].split(':')[1]
                 # 进行base64解码
                 plain_text = base64.b64decode(base64_ciphertext)
@@ -98,47 +109,56 @@ def analysis(file_object, api_level: int = 6):
                 troubleshooting.update(plain_dict)
         except:
             pass  # 遇到傻逼不写满10k就换行的日志就跳过
-    LoadedPlugins_list: list[dict] = troubleshooting.get('LoadedPlugins', [])
-    LoadedPlugins_dict = {}
-    main_plugin_list = []
-    testing_plugin_list = []
-    third_party_plugin_list = []
-    disabled_plugins_list = []
-    for i in LoadedPlugins_list:
-        temp_dict = {}
-        plugin_name = i['Name']
-        if i['Disabled'] is True:
-            disabled_plugins_list.append(plugin_name)
-            temp_dict['plugin_status'] = "disabled"
-        elif i['Testing'] is True:
-            testing_plugin_list.append(plugin_name)
-            temp_dict['plugin_status'] = "testing"
-        elif i['IsThirdParty'] is False:
-            main_plugin_list.append(plugin_name)
-            temp_dict['plugin_status'] = "main"
-        elif i['DalamudApiLevel'] != api_level:
-            disabled_plugins_list.append(plugin_name)
-            temp_dict['plugin_status'] = "error_api_level"
-        else:
-            third_party_plugin_list.append(plugin_name)
-            temp_dict['plugin_status'] = "3rd"
-        LoadedPlugins_dict[plugin_name] = {**temp_dict,
-                                           'EffectiveVersion': i['EffectiveVersion'],
-                                           'InstalledFromUrl': i['InstalledFromUrl'],
-                                           'InternalName': i['InternalName'],
-                                           'DalamudApiLevel': i['DalamudApiLevel'],
-                                           }
-    troubleshooting.pop('LoadedPlugins')
-    result = {
-        'Exception_Last': last_exception,
-        'Exception_Second_Last': second_last_exception,
-        'Exception_Third_Last': third_last_exception,
-        'Main_plugins': main_plugin_list,
-        'Testing_plugins': testing_plugin_list,
-        'Third_party_plugins': third_party_plugin_list,
-        **troubleshooting,
-        'loadedPlugins': LoadedPlugins_dict,
-        'Disabled_plugins': disabled_plugins_list,
-    }
-
+    if log_file_type == 0:
+        LoadedPlugins_list: list[dict] = troubleshooting.get('LoadedPlugins', [])
+        LoadedPlugins_dict = {}
+        main_plugin_list = []
+        testing_plugin_list = []
+        third_party_plugin_list = []
+        disabled_plugins_list = []
+        for i in LoadedPlugins_list:
+            temp_dict = {}
+            plugin_name = i['Name']
+            if i['Disabled'] is True:
+                disabled_plugins_list.append(plugin_name)
+                temp_dict['plugin_status'] = "disabled"
+            elif i['Testing'] is True:
+                testing_plugin_list.append(plugin_name)
+                temp_dict['plugin_status'] = "testing"
+            elif i['IsThirdParty'] is False:
+                main_plugin_list.append(plugin_name)
+                temp_dict['plugin_status'] = "main"
+            elif i['DalamudApiLevel'] != api_level:
+                disabled_plugins_list.append(plugin_name)
+                temp_dict['plugin_status'] = "error_api_level"
+            else:
+                third_party_plugin_list.append(plugin_name)
+                temp_dict['plugin_status'] = "3rd"
+            LoadedPlugins_dict[plugin_name] = {**temp_dict,
+                                               'EffectiveVersion': i['EffectiveVersion'],
+                                               'InstalledFromUrl': i['InstalledFromUrl'],
+                                               'InternalName': i['InternalName'],
+                                               'DalamudApiLevel': i['DalamudApiLevel'],
+                                               }
+        troubleshooting.pop('LoadedPlugins')
+        result = {
+            'Exception_Last': last_exception,
+            'Exception_Second_Last': second_last_exception,
+            'Exception_Third_Last': third_last_exception,
+            'Main_plugins': main_plugin_list,
+            'Testing_plugins': testing_plugin_list,
+            'Third_party_plugins': third_party_plugin_list,
+            'loadedPlugins': LoadedPlugins_dict,
+            'disabled_plugins': disabled_plugins_list,
+            'troubleshooting':troubleshooting,
+        }
+    elif log_file_type == 1:
+        result = {
+            'Exception_Last': last_exception,
+            'Exception_Second_Last': second_last_exception,
+            'Exception_Third_Last': third_last_exception,
+            'troubleshooting': troubleshooting,
+        }
+    else:
+        raise Exception("日志类型不支持或者无法判断日志类型。")
     return result
