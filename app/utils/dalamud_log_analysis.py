@@ -28,7 +28,7 @@ def merge_message(df, index, start_index, drop_index_list) -> int:
     return len(next_line)
 
 
-def analysis(file_object, api_level: int = 6) -> (dict,int|None):
+def analysis(file_object, api_level: int = 6) -> (dict, int | None):
     """分析日志方法
 
     Arguments:

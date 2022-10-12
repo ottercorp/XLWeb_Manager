@@ -6,13 +6,7 @@
 # @File    : main_func.py
 import secrets
 
-import redis
-
-redis_pool = redis.ConnectionPool(host='127.0.0.1', port=6379, password='', db=1, decode_responses=True)
-
-
-def redis_connect():
-    return redis.Redis(connection_pool=redis_pool)
+from . import redis_connect
 
 
 def save_log(log_base64: str) -> str:
