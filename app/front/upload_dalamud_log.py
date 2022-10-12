@@ -8,7 +8,6 @@
 import base64
 from io import BytesIO
 import json
-import os
 
 from flask import render_template, request, redirect, url_for, jsonify, flash, current_app
 from flask_wtf import FlaskForm
@@ -17,7 +16,7 @@ from wtforms import SubmitField
 
 from app.utils.dalamud_log_analysis import analysis
 from redis_db import save_log, read_log_short_url
-from . import front
+from . import front,auth
 
 
 class UploadDalamudLog(FlaskForm):
@@ -76,3 +75,31 @@ def _log_result_short(short_url):
             return jsonify({'msg': '短网址对应的存储信息有误'}), 400
     else:
         return jsonify({'msg': '短网址不存在'}), 404
+
+
+@front.route('/upload_dalamud_log/root', methods=['GET', 'POST'])
+@auth.login_required
+def _upload_dalamud_log_root():
+    upload_form = UploadDalamudLog()
+    if upload_form.validate_on_submit():
+        file_bytes, filename = request.files['file'].read(), request.files['file'].filename
+        if file_bytes and filename != '':
+            try:
+                file = BytesIO(file_bytes)
+                analysis_result, log_file_type = analysis(file, current_app.config['DALAMUD_API_LEVEL'])
+                msg = str(base64.urlsafe_b64encode(json.dumps(analysis_result).encode('utf-8')), 'utf-8')
+                short_url = save_log(msg)
+                # 如果文件小于10M，保存一份在本地，方便溯源。每天凌晨会有计划任务清理不在redis中的文件。
+                if len(file_bytes) < 10240000:
+                    with open(rf'./cache/upload_logs/{short_url}.log', 'wb') as f:
+                        f.write(file_bytes)
+                return redirect(url_for('front._log_result_short', short_url=short_url))
+            except Exception as e:
+                print(e)  # TODO: 异常日志打印
+                flash('文件解析失败，请检查是否是dalamud.log。', 'error')
+                return redirect(url_for('front._upload_dalamud_log_root'))
+        else:
+            flash('文件解析失败，请检查是否是dalamud.log。', 'error')
+            return redirect(url_for('front._upload_dalamud_log_root', form=upload_form))
+    flash('请将分析后的网页地址复制给相关人员，链接有效期为一天。', 'info')
+    return render_template(r'user/upload_dalamud_log.html', form=upload_form)
