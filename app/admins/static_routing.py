@@ -17,7 +17,7 @@ from . import admins, auth
 @auth.login_required
 def _main_website():
     try:
-        result = subprocess.getoutput("systemctl status XLWebServices")
+        result = subprocess.getoutput("systemctl status XLWeb-fastapi")
         result_list = result.split("\n")
         result_stauts = re.split(r'[()]', result_list[2])[1]
     except:
@@ -29,28 +29,28 @@ def _main_website():
 @admins.route('/start', methods=["GET", "POST"])
 @auth.login_required
 def _start_svr():
-    subprocess.getoutput("systemctl start XLWebServices")
+    subprocess.getoutput("systemctl start XLWeb-fastapi")
     return redirect(url_for("admins._main_website"))
 
 
 @admins.route('/restart', methods=["GET", "POST"])
 @auth.login_required
 def _restart_svr():
-    subprocess.getoutput("systemctl restart XLWebServices")
+    subprocess.getoutput("systemctl restart XLWeb-fastapi")
     return redirect(url_for("admins._main_website"))
 
 
 @admins.route('/stop', methods=["GET", "POST"])
 @auth.login_required
 def _stop_svr():
-    subprocess.getoutput("systemctl stop XLWebServices")
+    subprocess.getoutput("systemctl stop XLWeb-fastapi")
     return redirect(url_for("admins._main_website"))
 
 
 @admins.route('/download_logs', methods=["GET", "POST"])
 @auth.login_required
 def _download_logs():
-    result = subprocess.getoutput("journalctl -xe -u XLWebServices")
+    result = subprocess.getoutput("journalctl -xe -u XLWeb-fastapi")
     with open('./app/XLWebServices.log', 'w') as f:
         f.write(result)
     return send_file('XLWebServices.log', '.')
