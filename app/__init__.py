@@ -6,6 +6,7 @@
 # @File    : __init__.py.py
 
 import json
+import os
 
 from flask import Flask
 from flask_bootstrap import Bootstrap5
@@ -28,13 +29,10 @@ try:
         password = appsettings['auth_password']
 except FileNotFoundError:
     print("appsettings.json not found")
-    exit()
 except KeyError:
     print("appsettings.json not correct")
-    exit()
 except json.decoder.JSONDecodeError:
     print("appsettings.json not correct")
-    exit()
 except Exception as e:
     print(e)
     exit()
@@ -61,6 +59,10 @@ def create_app():
     app.register_blueprint(front_blueprint)
     from app.restapi_v1 import api_bp as api_blueprint
     app.register_blueprint(api_blueprint, url_prefix='/api/v1.0')
+
+    path = r'./cache/upload_logs'
+    if not os.path.exists(path):
+        os.makedirs(path)
 
     return app
 
@@ -89,7 +91,7 @@ def localhost(is_manager: bool = True):
         return 'https://xlweb.ffxiv.wang'
     else:
         if not is_manager:
-            return 'http://127.0.0.1:5000'
+            return f"http://127.0.0.1:{appsettings['XLWeb_PORT']}"
         return f"http://127.0.0.1:{appsettings['PORT']}"
 
 
