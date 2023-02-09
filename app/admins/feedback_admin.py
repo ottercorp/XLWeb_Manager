@@ -52,5 +52,6 @@ def _feedback_export():
             return_dict[plugin_name].append((version, level, description))
         else:
             return_dict[plugin_name] = [(version, level, description)]
-    print(return_dict)
+    for k,v in return_dict.items():
+        return_dict[k] = sorted(v, key=lambda x: x[0], reverse=True)
     return render_template('admin/feedback_export.html', export_dict=return_dict)
