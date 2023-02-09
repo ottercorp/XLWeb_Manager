@@ -46,9 +46,11 @@ def _feedback_export():
         feedback_id = temp_list[2]
         version = redis_client.hget(f'feedback|{level}|{plugin_name}|{feedback_id}', 'version')
         context = redis_client.hget(f'feedback|{level}|{plugin_name}|{feedback_id}', 'context')
+        exception = redis_client.hget(f'feedback|{level}|{plugin_name}|{feedback_id}', 'exception')
+        description = f"{context}\n\n{exception}" if exception else f"{context}"
         if plugin_name in return_dict.keys():
-            return_dict[plugin_name].append((version, level, context))
+            return_dict[plugin_name].append((version, level, description))
         else:
-            return_dict[plugin_name] = [(version, level, context)]
+            return_dict[plugin_name] = [(version, level, description)]
     print(return_dict)
     return render_template('admin/feedback_export.html', export_dict=return_dict)
