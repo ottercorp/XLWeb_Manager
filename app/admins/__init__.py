@@ -13,4 +13,4 @@ auth, csrf, localhost = auth, csrf, localhost
 
 admins = Blueprint("admins", __name__)
 
-from . import static_routing, revise_config, flush, analytics
+from . import static_routing, revise_config, flush, analytics,feedback_admin
