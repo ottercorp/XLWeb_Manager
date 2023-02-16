@@ -50,7 +50,7 @@ def _flush():
         # 确认域名是否是https://aonyx.ffxiv.wang/
         if url.startswith('https://aonyx.ffxiv.wang/'):
             try:
-                response = httpx.get(url)
+                response = httpx.head(url)
                 assert response.status_code == 200  # 查看url是否能访问
                 # 每次提交成功，都会清空刷新地址
                 form_flush.flush_url.data = ''
@@ -68,7 +68,7 @@ def _flush():
         # 确认域名是否是https://aonyx.ffxiv.wang/
         if url.startswith('https://aonyx.ffxiv.wang/'):
             try:
-                response = httpx.get(url)
+                response = httpx.head(url)
                 assert response.status_code == 200  # 查看url是否能访问
                 # 每次提交成功，都会清空刷新地址
                 form_flush.flush_url.data = ''
