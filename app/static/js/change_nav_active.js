@@ -8,6 +8,8 @@ if (window.location.pathname === "/config") {
     document.getElementById("loganalysis").className = "nav-link active";
 } else if (window.location.pathname === "/plugin_status") {
     document.getElementById("plugins").className = "nav-link active";
+} else if (window.location.pathname.startsWith("/feedback")) {
+    document.getElementById("feedback").className = "nav-link active";
 } else {
     document.getElementById("index").className = "nav-link active";
 }

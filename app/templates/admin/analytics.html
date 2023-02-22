@@ -1,0 +1,57 @@
+{% extends "admin/base.html" %}
+
+
+{% block page_content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>数据分析</h2>
+                <hr/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>XivLauncher安装次数： {{ xivlauncher_install_times }}</h4>
+                <h4>XivLauncher启动次数： {{ xivlauncher_start_times }}</h4>
+                <hr/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h4>插件安装次数： {{ plugin_install_times }}</h4>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-striped" style="width:100%;table-layout: fixed;word-break: break-all;vertical-align: middle">
+                    <tr>
+                        <th style="width:5%;text-align:center"></th>
+                        <th style="width:20%;text-align:center">插件名</th>
+                        <th style="width:20%;text-align:center">安装次数</th>
+                    </tr>
+                    {% for k,v in plugin_list_1.items() %}
+                        <tr>
+                            <td style="text-align:center;">{{ k }}</td>
+                            <td style="text-align:center;">{{ v[0] }}</td>
+                            <td style="text-align:center;">{{ v[1] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="col-md-6">
+                <table class="table table-striped" style="width:100%;table-layout: fixed;word-break: break-all;vertical-align: middle">
+                    <tr>
+                        <th style="width:5%;text-align:center"></th>
+                        <th style="width:20%;text-align:center">插件名</th>
+                        <th style="width:20%;text-align:center">安装次数</th>
+                    </tr>
+                    {% for k,v in plugin_list_2.items() %}
+                        <tr>
+                            <td style="text-align:center;">{{ k }}</td>
+                            <td style="text-align:center;">{{ v[0] }}</td>
+                            <td style="text-align:center;">{{ v[1] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
