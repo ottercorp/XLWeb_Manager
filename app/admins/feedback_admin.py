@@ -41,17 +41,18 @@ def _feedback_export():
     return_dict = {}
     for i in feedback_list:
         temp_list = i.replace('feedback|', '').split('|')
+        dhash = temp_list[0]
         plugin_name = temp_list[1]
-        level = temp_list[0]
-        feedback_id = temp_list[2]
-        version = redis_client.hget(f'feedback|{level}|{plugin_name}|{feedback_id}', 'version')
-        context = redis_client.hget(f'feedback|{level}|{plugin_name}|{feedback_id}', 'context')
-        exception = redis_client.hget(f'feedback|{level}|{plugin_name}|{feedback_id}', 'exception')
-        description = f"{context}\n\n{exception}" if exception else f"{context}"
+        order_id = temp_list[2]
+        version = redis_client.hget(f'feedback|{dhash}|{plugin_name}|{order_id}', 'version')
+        content = redis_client.hget(f'feedback|{dhash}|{plugin_name}|{order_id}', 'content')
+        exception = redis_client.hget(f'feedback|{dhash}|{plugin_name}|{order_id}', 'exception')
+        reporter = redis_client.hget(f'feedback|{dhash}|{plugin_name}|{order_id}', 'reporter')
+        description = [content, exception] if exception else [content]
         if plugin_name in return_dict.keys():
-            return_dict[plugin_name].append((version, level, description))
+            return_dict[plugin_name].append((version, dhash, description, reporter))
         else:
-            return_dict[plugin_name] = [(version, level, description)]
-    for k,v in return_dict.items():
+            return_dict[plugin_name] = [(version, dhash, description, reporter)]
+    for k, v in return_dict.items():
         return_dict[k] = sorted(v, key=lambda x: x[0], reverse=True)
     return render_template('admin/feedback_export.html', export_dict=return_dict)

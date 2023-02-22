@@ -10,26 +10,37 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <table style="width:100%;table-layout: fixed;word-break: break-all">
+                <table class="table table-striped" style="width:100%;table-layout: fixed;word-break: break-all;vertical-align: middle">
                     <tr>
                         <th style="width:15%;text-align:center">插件名</th>
                         <th style="width:10%;text-align:center">版本号</th>
-                        <th style="width:25%;text-align:center">出现问题</th>
-                        <th style="width:50%;text-align:center">具体描述</th>
+                        <th style="width:15%;text-align:center">Dalamud版本</th>
+                        <th style="width:50%;text-align:center">异常信息</th>
+                        <th style="width:10%;text-align:center">反馈人</th>
                     </tr>
                     {% for k,v in export_dict.items() %}
                         <tr>
-                            <th rowspan="{{ v|length }}" style="text-align:center">{{ k }}</th>
+                            <th rowspan="{{ v|length }}" style="text-align:center;">{{ k }}</th>
                             <td style="text-align:center">{{ v[0][0] }}</td>
                             <td style="text-align:center">{{ v[0][1] }}</td>
-                            <td>{{ v[0][2] }}</td>
+                            {% if v[0][2]|length == 2 %}
+                                <td>{{ v[0][2][0] }}<br/><br/>{{ v[0][2][1] }}</td>
+                            {% else %}
+                                <td>{{ v[0][2][0] }}</td>
+                            {% endif %}
+                            <td style="text-align:center">{{ v[0][3] }}</td>
                         </tr>
                         {% if v|length >1 %}
                             {% for i in range(1,v|length) %}
                                 <tr>
                                     <td style="text-align:center">{{ v[i][0] }}</td>
                                     <td style="text-align:center">{{ v[i][1] }}</td>
-                                    <td>{{ v[i][2] }}</td>
+                                    {% if v[i][2]|length == 2 %}
+                                        <td>{{ v[i][2][0] }}<br/><br/>{{ v[i][2][1] }}</td>
+                                    {% else %}
+                                        <td>{{ v[i][2][0] }}</td>
+                                    {% endif %}
+                                    <td style="text-align:center">{{ v[i][3] }}</td>
                                 </tr>
                             {% endfor %}
 
