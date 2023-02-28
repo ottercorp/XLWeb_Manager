@@ -11,14 +11,15 @@
                 <div>
                     {% for i in feedback_list %}
                         <div style="padding: 5px;float:left;">
-                            <a href="{{ url_for('admins._feedback_detail', plugin_name=v,feedback_id=k) }}" class="btn btn-outline-secondary"
+                            <a href="{{ url_for('admins._feedback_detail', plugin_name=i[1],feedback_id=i[2],dhash=i[0]) }}" class="btn btn-outline-secondary"
                                style="width: 100% ;max-width: 584px;border-radius: 24px;margin: 0 auto">{{ i[1] }}#{{ i[2] }}|{{ i[0] }}</a>
                         </div>
                     {% endfor %}
                 </div>
             </div>
-            <hr style="margin-top:10px"/>
+
             <div>
+                <hr style="margin-top:10px"/>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="window.location.href='{{ url_for( 'admins._feedback_export') }}'">
                     问题总览
                 </button>

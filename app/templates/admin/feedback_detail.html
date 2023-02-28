@@ -6,23 +6,29 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2>反馈详情 #{{ feedback_id }}</h2>
+                <div>
+                    <h2>反馈详情 #{{ feedback_id }} <button onclick=window.location.href="javascript:history.go(-1)" class="btn btn-outline-secondary" style="float:right">返回</button></h2>
+                </div>
                 <hr>
                 <p>插件名称：{{ plugin_name }}</p>
-                <p>错误级别：{{ level }}</p>
                 <p>插件版本：{{ version }}</p>
-                <p>反馈内容:<br/>{{ context }}</p>
+                <p>插件版本：{{ version }}</p>
+                <p>反馈内容:<br/>{{ content }}<br/><br/>{{ exception }}</p>
+                <br/>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h2>回复</h2>
+                <h4>回复</h4>
                 <hr>
                 <form method="post" action="{{ url_for('admins._feedback_reply', feedback_id=feedback_id) }}">
-                    {% csrf_token %}
-                    {{ render_hidden_errors(form) }}
-                    {{ render_form(form) }}
+                    {#{{ form.csrf_token }}#}
+                    {#{{ render_hidden_errors(form) }}#}
+                    {#{{ render_form(form) }}#}
                     <button type="submit" class="btn btn-primary">回复</button>
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            onClick="window.location.href='{{ url_for( 'admins._feedback_solve',feedback_id=feedback_id,from='export') }}'">Solved
+                    </button>
                 </form>
             </div>
         </div>
