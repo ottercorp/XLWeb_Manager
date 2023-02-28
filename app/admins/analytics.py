@@ -24,7 +24,7 @@ def _analytics():
     del plugin_count['accumulated']
     plugin_list_1: dict[str:int] = {}
     plugin_list_2: dict[str:int] = {}
-    i = 0
+    i = 1
     plugin_count = dict(sorted(plugin_count.items(), key=lambda x: int(x[1]), reverse=True))
     for k, v in plugin_count.items():
         if i % 2 == 0:
