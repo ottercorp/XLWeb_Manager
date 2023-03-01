@@ -28,9 +28,9 @@ def _analytics():
     plugin_count = dict(sorted(plugin_count.items(), key=lambda x: int(x[1]), reverse=True))
     for k, v in plugin_count.items():
         if i % 2 == 0:
-            plugin_list_1[i] = (k,v)
-        else:
             plugin_list_2[i] = (k,v)
+        else:
+            plugin_list_1[i] = (k,v)
         i += 1
 
     return render_template('admin/analytics.html',
