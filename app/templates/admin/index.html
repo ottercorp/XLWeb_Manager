@@ -31,6 +31,17 @@
 
             </div>
             <br/>
+            <hr/>
+            <div class="col-md-12">
+                <h2>重新擦车</h2>
+                <div style="margin-bottom:2px; float: left;font-size: 14px;">
+                    <button class="btn btn-primary px-2 py-1" type="button" onclick="window.location.href='{{ url_for( 'admins._rebuild_cache',cache = dalamud) }}'">dalamud</button>
+                    <button class="btn btn-primary px-2 py-1" type="button" onclick="window.location.href='{{ url_for( 'admins._rebuild_cache',cache = xivlauncher) }}'"> xivlauncher</button>
+                    <button class="btn btn-primary px-2 py-1" type="button" onclick="window.location.href='{{ url_for( 'admins._rebuild_cache',cache = plugin) }}'"> plugin</button>
+                    <button class="btn btn-primary px-2 py-1" type="button" onclick="window.location.href='{{ url_for( 'admins._rebuild_cache',cache = asset) }}'"> asset</button>
+                    <button class="btn btn-primary px-2 py-1" type="button" onclick="window.location.href='{{ url_for( 'admins._rebuild_cache',cache = dalamud_changelog) }}'"> dalamud_changelog</button>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

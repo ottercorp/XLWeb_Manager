@@ -16,6 +16,8 @@ from wtforms.validators import DataRequired, URL, NumberRange
 
 from . import admins, auth
 
+xlweb_config_path = r'/www/wwwroot/XLWebServices-fastapi/.env'
+
 
 class Config_Form(FlaskForm):
     Logging_LogLevel_Default = StringField('LogLevel_Default', validators=[DataRequired()])
@@ -52,15 +54,13 @@ class Config_Form(FlaskForm):
 @auth.login_required
 def _config():
     try:
-        with open(r'/www/XLWebServices/appsettings.json', 'r', encoding='utf-8') as f:
+        with open(xlweb_config_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
         file_path = r'/www/XLWebServices/appsettings.json'
-        file_path_backup = rf'/www/XLWebServices/appsettings.{int(time.time())}.json'
     except FileNotFoundError:
         with open(r'./tests/appsettings.json', 'r', encoding='utf-8') as f:
             config = json.load(f)
         file_path = r'./tests/appsettings.json'
-        file_path_backup = rf'./tests/appsettings.{int(time.time())}.json'
     form = Config_Form()
     if request.method == 'GET':
         form.Logging_LogLevel_Default.data = config['Logging']['LogLevel']['Default']
@@ -90,6 +90,7 @@ def _config():
         form.HostedUrl.data = config['HostedUrl']
         form.FileCacheDirectory.data = config['FileCacheDirectory']
     if form.validate_on_submit():
+        file_path_backup = rf'/www/XLWebServices/appsettings.{int(time.time())}.json'
         with open(file_path, 'r', encoding='utf-8') as f:
             config = json.load(f)
         with open(file_path_backup, 'w', encoding='utf-8') as f:
