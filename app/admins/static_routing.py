@@ -73,5 +73,6 @@ def _rebuild_cache(cache):
         keyword = "asset"
     else:
         return redirect(url_for("admins._main_website"))
-    subprocess.getoutput(f"cd /www/wwwroot/XLWebServices-fastapi && python regen.py {keyword}")
+    process = subprocess.Popen(f"python3 regen.py {keyword}",shell=True,cwd=r"/www/wwwroot/XLWebServices-fastapi")
+    process.wait()
     return redirect(url_for("admins._main_website"))
