@@ -54,3 +54,24 @@ def _download_logs():
     with open('./app/XLWebServices.log', 'w') as f:
         f.write(result)
     return send_file('XLWebServices.log', '.')
+
+
+@admins.route('/rebuild_cache/<cache>', methods=["GET", "POST"])
+@auth.login_required
+def _rebuild_cache(cache):
+    if cache == "plugin":
+        keyword = "plugin"
+    elif cache == "xivlauncher":
+        keyword = "xivlauncher"
+    elif cache == "dalamud":
+        keyword = "dalamud"
+    elif cache == "all":
+        keyword = ""
+    elif cache == "dalamud_changelog":
+        keyword = "dalamud_changelog"
+    elif cache == "asset":
+        keyword = "asset"
+    else:
+        return redirect(url_for("admins._main_website"))
+    subprocess.getoutput(f"cd /www/wwwroot/XLWebServices-fastapi && python regen.py {keyword}")
+    return redirect(url_for("admins._main_website"))
