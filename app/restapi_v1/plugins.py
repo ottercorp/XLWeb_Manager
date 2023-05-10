@@ -8,6 +8,7 @@
 import json
 
 import httpx
+from flask import current_app
 from flask_restful import Resource, marshal_with
 
 from . import api, localhost, DefaultApiResponse, resource_fields
@@ -21,6 +22,8 @@ class PluginMasterSite(Resource):
         result_test = {}
         result_all = {}
         for i in plugin_master_json:
+            if i['DalamudApiLevel'] != current_app.config['DalamudApiLevel']:
+                continue # Skip if not compatible with current Dalamud API level
             if i['IsTestingExclusive'] is False:
                 result_main[i['Name']] = {
                     'is_test': i['IsTestingExclusive'],
