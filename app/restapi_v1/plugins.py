@@ -22,7 +22,7 @@ class PluginMasterSite(Resource):
         result_test = {}
         result_all = {}
         for i in plugin_master_json:
-            if i['DalamudApiLevel'] != current_app.config['DalamudApiLevel']:
+            if i['DalamudApiLevel'] != current_app.config['DALAMUD_API_LEVEL']:
                 continue # Skip if not compatible with current Dalamud API level
             if i['IsTestingExclusive'] is False:
                 result_main[i['Name']] = {
